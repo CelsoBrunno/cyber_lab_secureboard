@@ -11,9 +11,10 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from werkzeug.security import generate_password_hash, check_password_hash
 from wtforms import StringField, PasswordField, TextAreaField, SubmitField
-from wtforms.validators import DataRequired, Length, Email
+from wtforms.validators import DataRequired, Length, Regexp
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+EMAIL_FORMAT = r"^[^@\s]+@[^@\s]+\.[^@\s]+$"
 
 app = Flask(__name__)
 app.config.update(
@@ -58,7 +59,10 @@ class Comment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
 class LoginForm(FlaskForm):
-    email = StringField("E-mail", validators=[DataRequired(), Email(), Length(max=120)])
+    email = StringField(
+        "E-mail",
+        validators=[DataRequired(), Length(max=120), Regexp(EMAIL_FORMAT, message="E-mail inválido.")],
+    )
     password = PasswordField("Senha", validators=[DataRequired(), Length(min=8, max=128)])
     submit = SubmitField("Entrar")
 
@@ -67,7 +71,10 @@ class CommentForm(FlaskForm):
     submit = SubmitField("Publicar")
 
 class UserForm(FlaskForm):
-    email = StringField("E-mail", validators=[DataRequired(), Email(), Length(max=120)])
+    email = StringField(
+        "E-mail",
+        validators=[DataRequired(), Length(max=120), Regexp(EMAIL_FORMAT, message="E-mail inválido.")],
+    )
     password = PasswordField("Senha", validators=[DataRequired(), Length(min=12, max=128)])
     submit = SubmitField("Criar usuário")
 
