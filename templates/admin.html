@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Admin{% endblock %}
+{% block content %}
+<h1>Painel administrativo</h1>
+<p><a class="button" href="{{ url_for('create_user') }}">Criar usuário</a></p>
+
+<section class="card">
+<h2>Usuários</h2>
+<table>
+<tr><th>ID</th><th>E-mail</th><th>Perfil</th><th>Criado</th></tr>
+{% for u in users %}
+<tr><td>{{ u.id }}</td><td>{{ u.email }}</td><td>{{ u.role }}</td><td>{{ u.created_at }}</td></tr>
+{% endfor %}
+</table>
+</section>
+
+<section class="card">
+<h2>Comentários</h2>
+{% for c in comments %}
+<p><strong>{{ c.author.email }}</strong>: {{ c.body }}</p>
+{% endfor %}
+</section>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}SecureBoard{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>SecureBoard</h1>
+  <p>Quadro de comentários do laboratório de cibersegurança.</p>
+</section>
+
+{% if current_user %}
+<section class="card">
+  <h2>Novo comentário</h2>
+  <form method="post" action="{{ url_for('comment') }}">
+    {{ comment_form.hidden_tag() if comment_form else '' }}
+    <textarea name="body" maxlength="1000" required placeholder="Escreva um comentário..."></textarea>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit">Publicar</button>
+  </form>
+</section>
+{% endif %}
+
+<section>
+  <h2>Comentários</h2>
+  {% for c in comments %}
+    <article class="card">
+      <div class="meta">{{ c.author.email }} · {{ c.created_at }}</div>
+      <p>{{ c.body }}</p>
+    </article>
+  {% else %}
+    <p>Nenhum comentário ainda.</p>
+  {% endfor %}
+</section>
+{% endblock %}

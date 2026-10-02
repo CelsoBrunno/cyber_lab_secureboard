@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.pyc
+secureboard.db
+security.log
+.env
